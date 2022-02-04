@@ -1,0 +1,651 @@
+-- DETTA ÄR LABB 1 DATABASHANTERING MARCUS DAVIDSSON MT21.
+
+CREATE DATABASE skivsamlingMarcusDavidssonMT21;
+-- skapar en ny databas, skapar därefter 5 olika tabeller.
+
+CREATE TABLE artist(
+	artistId INT NOT NULL AUTO_INCREMENT,
+	artistNamn VARCHAR(50),
+	PRIMARY KEY (artistId)
+);
+
+CREATE TABLE musikgenre(
+	musikgenreId INT NOT NULL AUTO_INCREMENT,
+	musikgenreNamn VARCHAR(50),
+	PRIMARY KEY (musikgenreId)
+);
+
+CREATE TABLE musiker(
+	musikerId INT NOT NULL AUTO_INCREMENT,
+	musikerNamn VARCHAR(50),
+	instrument VARCHAR(50),
+	PRIMARY KEY (musikerId)
+);
+
+CREATE TABLE album(
+	albumId INT NOT NULL AUTO_INCREMENT,
+	albumTitel VARCHAR(50),
+	albumMusikgenreId INT,
+	albumArtistId INT,
+	PRIMARY KEY (albumId),
+    FOREIGN KEY (albumMusikgenreId) REFERENCES musikgenre(musikgenreId),
+    FOREIGN KEY (albumArtistId) REFERENCES artist(artistId)
+);
+
+CREATE TABLE albumMusiker(
+	albumMusikerId INT NOT NULL AUTO_INCREMENT,
+
+	albumMusikerMId INT,
+	albumMusikerAId INT,
+	PRIMARY KEY (albumMusikerId),
+    FOREIGN KEY (albumMusikerMId) REFERENCES musiker(musikerId),
+    FOREIGN KEY (albumMusikerAId) REFERENCES album(albumId)
+);
+
+-- Tabellerna är klara. Nu lägger jag till data i artist, musikgenre, och sedan musiker.
+
+
+-- *** LÄGGER IN DATA I TABELLEN musikgenre ***
+
+INSERT INTO musikgenre(musikgenreNamn) VALUES('Trallpunk'), ('Heavy Metal'), ('Power Metal'), ('Black Metal');
+-- Då är lite olika musikgenres inlagda. Skall nu se om dessa infördes korrekt genom en SELECT-sats på musikgenre.
+
+SELECT * FROM musikgenre;
+ -- Check, det fungerar.
+
+ -- *** LÄGGER IN DATA I TABELLEN artist ***
+
+INSERT INTO artist(artistNamn) VALUES('Iron Maiden'), ('Helloween'), ('Gamma Ray'), ('Dia Psalma'), ('Marduk');
+-- Då är lite olika artister inlagda.
+
+SELECT * FROM artist;
+-- Check, det fungerar. Dags att lägga in musiker i musikertabellen.
+
+-- *** LÄGGER IN DATA I TABELLEN musiker ***
+
+
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Ulke', 'Guitars & Vocals');
+-- Första musikern inlagd. Dubbelkollar så att det fungerade korrekt.
+
+SELECT * FROM musiker;
+-- Check, det fungerar. Fortsätter med att lägga in övriga musiker.
+
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Stipen', 'Drums');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Ztikkan', 'Bass & Vocals');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Kai Hansen', 'Guitars & Vocals');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Daniel Zimmermann', 'Drums');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Henjo Richter', 'Guitars & Keys');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Dirk Schlächter', 'Bass');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Joakim Af Gravf', 'Vocals & Drums');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Morgan Håkansson', 'Guitars');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Devo Andersson', 'Guitars');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('B. War', 'Bass');
+
+SELECT * FROM musiker;
+-- dubbelkollar så att det fungerar korrekt och ja, det gör det. Forsätter vidare med INSER INTO musiker.
+
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Uli Kusch', 'Drums');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Ralf Scheepers', 'Vocals');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Uwe Wessel', 'Bass');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Markus Grosskopf', 'Bass');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Andreas Deris', 'Vocals');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Sascha Gerstner', 'Guitars');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Michael Weikath', 'Guitars');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Ingo Schwichtenberg', 'Drums');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Paul Di`Anno', 'Vocals');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Steve Harris', 'Bass');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Dennis Stratton', 'Guitars & Vocals');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Dave Murray', 'Guitars');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Dave Murray', 'Guitars');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Clive Burr', 'Drums');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Michael Kiske', 'Vocals');
+-- Då är samtliga musiker inlagda i tabellen musiker. Kör lite kontrollfrågor på de som spelar gitarr och de som både lirar gitarr och sjunger på instrument.
+
+SELECT * FROM musiker WHERE instrument = 'Guitars';
+-- Check, det fungerar. Skall nu kolla om jag kan få fram alla som spelar gitarr och även de som spelar gitarr och sjunger.
+
+SELECT *
+FROM musiker
+WHERE instrument = 'Guitars' OR instrument = 'Guitars & Vocals';
+-- Check, det fungerar korrekt. Provade också att skriva inte allt på samma rad.
+
+-- *** LÄGGER IN DATA I TABELLEN album ***
+
+INSERT INTO album (albumTitel,albumArtistId,albumMusikgenreId) VALUES('Iron Maiden', 1, 2);
+-- Första albumet inlagt, kör en kontrollfråga.
+
+SELECT *
+FROM album;
+-- Check, det fungerar.
+
+SELECT  * FROM artist;
+-- Lägger in resterande album och kopplar dessa med rätt id-nummer till artist och musikgenre.
+
+INSERT INTO album (albumTitel,albumArtistId,albumMusikgenreId) VALUES('Rabbit Don´t Come Easy' , 2, 3);
+INSERT INTO album (albumTitel,albumArtistId,albumMusikgenreId) VALUES('Keepers Of The Seven Keys Part II', 2, 3);
+INSERT INTO album (albumTitel,albumArtistId,albumMusikgenreId) VALUES('Sigh No More', 3, 3);
+INSERT INTO album (albumTitel,albumArtistId,albumMusikgenreId) VALUES('No World Order', 3, 3);
+INSERT INTO album (albumTitel,albumArtistId,albumMusikgenreId) VALUES('Gryningstid', 4, 1);
+INSERT INTO album (albumTitel,albumArtistId,albumMusikgenreId) VALUES('Those Of The Unlight', 5, 4);
+
+SELECT * FROM album
+WHERE albumArtistId = 3;
+-- Kör en kontrollfråga där enbart albumet som kopplas ihop med artisten med ID 3 (Gamma Ray) visas. Det fungerade.
+
+SELECT * FROM musiker
+WHERE instrument = 'Vocals';
+-- Kör en kontrollfråga där musiker med endast "Vocals" visas. Fungerar fint.
+
+
+SELECT * FROM musiker;
+SELECT * FROM album;
+-- Då börjar arbetet med att lägga in data i tabellen albumMusiker, till detta behövs ID nummer till artist och album.
+
+-- *** LÄGGER IN DATA I TABELLEN albumMusiker ***
+
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(7, 1); -- (Gryningstid 7, Ulke 1,)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(7, 1); -- (Gryningstid 7, Ulke 1,)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(7, 1); -- (Gryningstid 7, Ulke 1,)
+
+SELECT * FROM albumMusiker;
+-- Kör en kontrollfråga. Musiker Ulke lades in två ggr för mycket. Får radera två Ulke, dvs. albumMusikerId 2 och 3.
+
+DELETE FROM albumMusiker WHERE albumMusikerId = 2;
+DELETE FROM albumMusiker WHERE albumMusikerId = 3;
+-- Nu är de Ulke-kopiorna borta och jag kan fortsätta lägga in data i albumMusiker-tabellen.
+
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(7, 2); -- (Gryningstid 7, Stipen 2)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(7, 3); -- (Gryningstid 7,Ztikkan 3)
+
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(2, 16); -- (Rabbit don't came easy 2, Andreas Deris 16)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(2, 18); -- (Rabbit don't came easy 2, Michael Weikath 18)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(2, 17); -- (Rabbit don't came easy 2, Sascha Gerstner 17)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(2, 15); -- (Rabbit don't came easy 2, Markus Grosskopf 15) -- KLART
+
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(6, 8); -- (Those Of The Unlight 6, Joakim Af Gravf 8)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(6, 9); -- (Those Of The Unlight 6, Morgan Håkansson 9)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(6, 10); -- (Those Of The Unlight 6, Devo Andersson 10)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(6, 11); -- (Those Of The Unlight 6, B. War 11)
+
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(5, 4); -- (No World Order 5, Kai Hansen 4 )
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(5, 5); -- (No World Order 5, Daniel Zimmermann 5)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(5, 6); -- (No World Order 5,  Henjo Richter 6)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(5, 7); -- (No World Order 5,  Dirk Schlächter 7)
+
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(4, 7); -- (Sigh No More 4,  Dirk Schlächter 7)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(4, 4); -- (Sigh No More 4,  Kai Hansen 4)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(4, 13); -- (Sigh No More 4,  Ralf Scheepers 13)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(4, 14); -- (Sigh No More 4,  Uwe Wessel 14)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(4, 12); -- (Sigh No More 4,  Uli Kusch 12)
+
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(3, 25); -- (Keepers Of The Seven Keys Part II 3,  Michael Kiske 25)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(3, 4); -- (Keepers Of The Seven Keys Part II 3,  Kai Hansen 4)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(3, 18); -- (Keepers Of The Seven Keys Part II 3,  Michael Weikath 18)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(3, 15); -- (Keepers Of The Seven Keys Part II 3,  Markus Grosskopf 15)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(3, 19); -- (Keepers Of The Seven Keys Part II 3,  Ingo Schwichtenberg 19)
+
+
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(1, 20); -- (Iron Maiden 1,  Paul Di Anno 20)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(1, 21); -- (Iron Maiden 1,  Steve Harris 21)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(1, 22); -- (Iron Maiden 1,  Dennis Stratton 22)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(1, 23); -- (Iron Maiden 1,  Dave Murray 23)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(1, 24); -- (Iron Maiden 1,  Clive Burr 24)
+
+SELECT * FROM albumMusiker;
+-- Kör en kontrollfråga för att kolla så all data är på rätt plats. Ser ut att stämma.
+
+-- sångaren i Helloween heter Andreas Deris, men på många plattor står det Andi Deris. Jag tänker nu ändra/uppdatera det inlagna namnet till Andi Deris istället för Andreas Deris.
+
+UPDATE musiker
+SET musikerNamn = 'Andi Deris'
+WHERE musikerId = 16
+;
+
+SELECT * FROM musiker;
+-- Dubbelkollade och såg att ändringen genomfördes korrekt.
+
+-- *** SKAPAR INNER JOINS ***
+
+SELECT artistId
+FROM artist
+INNER JOIN album
+ON artistId = albumId;
+-- Genomförd och grön bok!
+
+SELECT musikgenreId
+FROM musikgenre
+INNER JOIN album
+ON musikgenreId = albumId;
+-- Genomförd och grön bok!
+
+
+SELECT musikerId, musikerNamn, albumTitel
+FROM musiker
+INNER JOIN albumMusiker ON musiker.musikerId = albumMusiker.albumMusikerMId
+INNER JOIN album ON albumMusiker.albumMusikerAId = album.albumId;
+-- Genomförd och grön bok!
+
+-- *** SKAPAR VIEWS ***
+
+CREATE VIEW viewAlbumMaiden AS
+SELECT musikerId, musikerNamn, albumTitel
+FROM musiker
+INNER JOIN albumMusiker ON musiker.musikerId = albumMusiker.albumMusikerMId
+INNER JOIN album ON albumMusiker.albumMusikerAId = album.albumId
+WHERE albumTitel = 'Iron Maiden';
+-- Genomförd och grön bok!
+
+
+SELECT * FROM viewAlbumMaiden;
+-- Kör en kontrollfråga på viewAlbumMaiden och ja, den fungerar! Forsätter att skapa nästa View.
+
+CREATE VIEW viewKaiHansensAlbum AS
+SELECT musikerId, musikerNamn, albumTitel
+FROM musiker
+INNER JOIN albumMusiker ON musiker.musikerId = albumMusiker.albumMusikerMId
+INNER JOIN album ON albumMusiker.albumMusikerAId = album.albumId
+WHERE musikerNamn = 'Kai Hansen';
+-- Genomförd och grön bok!
+
+SELECT * FROM viewKaiHansensAlbum;
+-- Kör en kontrollfråga på viewAlbumMaiden och ja, den fungerar! Skapar en likadan och lägger till artistNamn.
+
+CREATE VIEW viewKaiHansensAlbumOchArtist AS
+SELECT musikerId, musikerNamn, albumTitel, artistNamn
+FROM musiker
+INNER JOIN albumMusiker ON musiker.musikerId = albumMusiker.albumMusikerMId
+INNER JOIN album ON albumMusiker.albumMusikerAId = album.albumId
+INNER JOIN artist ON artist.artistId = album.albumArtistId
+WHERE musikerNamn = 'Kai Hansen';
+-- Genomförd och grön bok!
+
+SELECT * FROM viewKaiHansensAlbumOchArtist;
+-- Kör en kontrollfråga och ser att den fungerar, skapar ytterliggare en vy som denna MEN lägger även till musikgenre.
+
+CREATE VIEW viewKaiHansensAlbumOchArtistochGenre AS
+SELECT musikerId, musikerNamn, albumTitel, artistNamn, musikgenreNamn
+FROM musiker
+INNER JOIN albumMusiker ON musiker.musikerId = albumMusiker.albumMusikerMId
+INNER JOIN album ON albumMusiker.albumMusikerAId = album.albumId
+INNER JOIN artist ON artist.artistId = album.albumArtistId
+INNER JOIN musikgenre ON musikgenre.musikgenreId = album.albumMusikgenreId
+WHERE musikerNamn = 'Kai Hansen';
+-- Genomförd och grön bok!
+
+SELECT * FROM viewkaihansensalbumochartistochgenre;
+-- Kör en kontrollfråga och ser att det nu även finns med musikgenre. Testar med att skapa en sista VIEW där även instrument får vara med.
+
+-- ****
+
+CREATE VIEW viewKaiHansensAlbumOchArtistochGenreochInstrument AS
+SELECT musikerId, musikerNamn, albumTitel, artistNamn, musikgenreNamn, instrument
+FROM musiker
+INNER JOIN albumMusiker ON musiker.musikerId = albumMusiker.albumMusikerMId
+INNER JOIN album ON albumMusiker.albumMusikerAId = album.albumId
+INNER JOIN artist ON artist.artistId = album.albumArtistId
+INNER JOIN musikgenre ON musikgenre.musikgenreId = album.albumMusikgenreId
+WHERE musikerNamn = 'Kai Hansen';
+-- Genomförd och grön bok!
+
+SELECT * FROM viewkaihansensalbumochartistochgenreochinstrument;
+-- Kör en kontrollfråga och ser att view fungerar korrekt. Då är samtliga inlagd data med Kai Hansen med i en och samma tabell. Kul :)
+
+-- *** SKAPA UNIKT INDEX OCH KÖRA KONTROLLERA INTEGRITETEN ***
+
+CREATE UNIQUE INDEX index_musikerNamn ON musiker(musikerNamn);
+-- Index skapat, grön bock.Då plockar jag en musiker fårn listan och försöker lägga till samma person på nytt.
+
+SELECT * FROM musiker;
+
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Stipen', 'Drums');
+-- Det gick inte att lägga till Stipen på nytt. Bra, då fungerar integriteten. Provar att radera tabellen musikgenre.
+
+DROP table musikgenre;
+-- Det funkade inte, alltså fungerar integriteten som sig bör.
+
+-- *** SKAPAR STATESTIK ***
+
+SELECT * FROM musiker;
+
+SELECT COUNT(musikerId) AS gitarrkollen FROM musiker WHERE musiker.instrument = 'Guitars';
+-- kollar statestik på hur många som har "Guitars" som instrument. Får fram siffran 5.
+
+SELECT * FROM musiker;
+-- Kör en kontrollfråga, räknar och ser att det stämmer.
+
+SELECT COUNT(musikerId) AS gitarrkollen FROM musiker WHERE musiker.instrument LIKE '%Guitar%';
+-- Kollar statestik på hur många som har Guitar och extra instrument. Får fram siffran 9.
+
+SELECT * FROM musiker;
+-- Kör en kontrollfråga, räknar och ser att det stämmer.
+
+
+-- *** THE END ***
+
+
+-- DETTA ÄR LABB 1 DATABASHANTERING MARCUS DAVIDSSON MT21.
+
+CREATE DATABASE skivsamlingMarcusDavidssonLabb1MT21;
+-- skapar en ny databas, skapar därefter 5 olika tabeller.
+
+CREATE TABLE artist(
+	artistId INT NOT NULL AUTO_INCREMENT,
+	artistNamn VARCHAR(50),
+	PRIMARY KEY (artistId)
+);
+
+CREATE TABLE musikgenre(
+	musikgenreId INT NOT NULL AUTO_INCREMENT,
+	musikgenreNamn VARCHAR(50),
+	PRIMARY KEY (musikgenreId)
+);
+
+CREATE TABLE musiker(
+	musikerId INT NOT NULL AUTO_INCREMENT,
+	musikerNamn VARCHAR(50),
+	instrument VARCHAR(50),
+	PRIMARY KEY (musikerId)
+);
+
+CREATE TABLE album(
+	albumId INT NOT NULL AUTO_INCREMENT,
+	albumTitel VARCHAR(50),
+	albumMusikgenreId INT,
+	albumArtistId INT,
+	PRIMARY KEY (albumId),
+    FOREIGN KEY (albumMusikgenreId) REFERENCES musikgenre(musikgenreId),
+    FOREIGN KEY (albumArtistId) REFERENCES artist(artistId)
+);
+
+CREATE TABLE albumMusiker(
+	albumMusikerId INT NOT NULL AUTO_INCREMENT,
+
+	albumMusikerMId INT,
+	albumMusikerAId INT,
+	PRIMARY KEY (albumMusikerId),
+    FOREIGN KEY (albumMusikerMId) REFERENCES musiker(musikerId),
+    FOREIGN KEY (albumMusikerAId) REFERENCES album(albumId)
+);
+
+-- Tabellerna är klara. Nu lägger jag till data i artist, musikgenre, och sedan musiker.
+
+
+-- *** LÄGGER IN DATA I TABELLEN musikgenre ***
+
+INSERT INTO musikgenre(musikgenreNamn) VALUES('Trallpunk'), ('Heavy Metal'), ('Power Metal'), ('Black Metal');
+-- Då är lite olika musikgenres inlagda. Skall nu se om dessa infördes korrekt genom en SELECT-sats på musikgenre.
+
+SELECT * FROM musikgenre;
+ -- Check, det fungerar.
+
+ -- *** LÄGGER IN DATA I TABELLEN artist ***
+
+INSERT INTO artist(artistNamn) VALUES('Iron Maiden'), ('Helloween'), ('Gamma Ray'), ('Dia Psalma'), ('Marduk');
+-- Då är lite olika artister inlagda.
+
+SELECT * FROM artist;
+-- Check, det fungerar. Dags att lägga in musiker i musikertabellen.
+
+-- *** LÄGGER IN DATA I TABELLEN musiker ***
+
+
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Ulke', 'Guitars & Vocals');
+-- Första musikern inlagd. Dubbelkollar så att det fungerade korrekt.
+
+SELECT * FROM musiker;
+-- Check, det fungerar. Fortsätter med att lägga in övriga musiker.
+
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Stipen', 'Drums');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Ztikkan', 'Bass & Vocals');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Kai Hansen', 'Guitars & Vocals');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Daniel Zimmermann', 'Drums');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Henjo Richter', 'Guitars & Keys');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Dirk Schlächter', 'Bass');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Joakim Af Gravf', 'Vocals & Drums');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Morgan Håkansson', 'Guitars');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Devo Andersson', 'Guitars');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('B. War', 'Bass');
+
+SELECT * FROM musiker;
+-- dubbelkollar så att det fungerar korrekt och ja, det gör det. Forsätter vidare med INSER INTO musiker.
+
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Uli Kusch', 'Drums');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Ralf Scheepers', 'Vocals');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Uwe Wessel', 'Bass');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Markus Grosskopf', 'Bass');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Andreas Deris', 'Vocals');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Sascha Gerstner', 'Guitars');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Michael Weikath', 'Guitars');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Ingo Schwichtenberg', 'Drums');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Paul Di`Anno', 'Vocals');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Steve Harris', 'Bass');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Dennis Stratton', 'Guitars & Vocals');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Dave Murray', 'Guitars');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Clive Burr', 'Drums');
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Michael Kiske', 'Vocals');
+-- Då är samtliga musiker inlagda i tabellen musiker. Kör lite kontrollfrågor på de som spelar gitarr och de som både lirar gitarr och sjunger på instrument.
+
+SELECT * FROM musiker WHERE instrument = 'Guitars';
+-- Check, det fungerar. Skall nu kolla om jag kan få fram alla som spelar gitarr och även de som spelar gitarr och sjunger.
+
+SELECT *
+FROM musiker
+WHERE instrument = 'Guitars' OR instrument = 'Guitars & Vocals';
+-- Check, det fungerar korrekt. Provade också att skriva inte allt på samma rad.
+
+-- *** LÄGGER IN DATA I TABELLEN album ***
+
+INSERT INTO album (albumTitel,albumArtistId,albumMusikgenreId) VALUES('Iron Maiden', 1, 2);
+-- Första albumet inlagt, kör en kontrollfråga.
+
+SELECT *
+FROM album;
+-- Check, det fungerar.
+
+SELECT  * FROM artist;
+-- Lägger in resterande album och kopplar dessa med rätt id-nummer till artist och musikgenre.
+
+INSERT INTO album (albumTitel,albumArtistId,albumMusikgenreId) VALUES('Rabbit Don´t Come Easy' , 2, 3);
+INSERT INTO album (albumTitel,albumArtistId,albumMusikgenreId) VALUES('Keepers Of The Seven Keys Part II', 2, 3);
+INSERT INTO album (albumTitel,albumArtistId,albumMusikgenreId) VALUES('Sigh No More', 3, 3);
+INSERT INTO album (albumTitel,albumArtistId,albumMusikgenreId) VALUES('No World Order', 3, 3);
+INSERT INTO album (albumTitel,albumArtistId,albumMusikgenreId) VALUES('Gryningstid', 4, 1);
+INSERT INTO album (albumTitel,albumArtistId,albumMusikgenreId) VALUES('Those Of The Unlight', 5, 4);
+
+SELECT * FROM album
+WHERE albumArtistId = 3;
+-- Kör en kontrollfråga där enbart albumet som kopplas ihop med artisten med ID 3 (Gamma Ray) visas. Det fungerade.
+
+SELECT * FROM musiker
+WHERE instrument = 'Vocals';
+-- Kör en kontrollfråga där musiker med endast "Vocals" visas. Fungerar fint.
+
+
+SELECT * FROM musiker;
+SELECT * FROM album;
+-- Då börjar arbetet med att lägga in data i tabellen albumMusiker, till detta behövs ID nummer till artist och album.
+
+-- *** LÄGGER IN DATA I TABELLEN albumMusiker ***
+
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(7, 1); -- (Gryningstid 6, Ulke 1,)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(7, 1); -- (Gryningstid 6, Ulke 1,)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(7, 1); -- (Gryningstid 6, Ulke 1,)
+
+SELECT * FROM albumMusiker;
+-- Kör en kontrollfråga. Musiker Ulke lades in två ggr för mycket. Får radera två Ulke, dvs. albumMusikerId 2 och 3.
+
+DELETE FROM albumMusiker WHERE albumMusikerId = 2;
+DELETE FROM albumMusiker WHERE albumMusikerId = 3;
+-- Nu är de Ulke-kopiorna borta och jag kan fortsätta lägga in data i albumMusiker-tabellen.
+
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(7, 2); -- (Gryningstid 6, Stipen 2)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(7, 3); -- (Gryningstid 6,Ztikkan 3)
+
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(2, 16); -- (Rabbit don't came easy 2, Andreas Deris 16)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(2, 18); -- (Rabbit don't came easy 2, Michael Weikath 18)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(2, 17); -- (Rabbit don't came easy 2, Sascha Gerstner 17)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(2, 15); -- (Rabbit don't came easy 2, Markus Grosskopf 15) -- KLART
+
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(6, 8); -- (Those Of The Unlight 7, Joakim Af Gravf 8)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(6, 9); -- (Those Of The Unlight 7, Morgan Håkansson 9)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(6, 10); -- (Those Of The Unlight 7, Devo Andersson 10)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(6, 11); -- (Those Of The Unlight 7, B. War 11)
+
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(5, 4); -- (No World Order 5, Kai Hansen 4 )
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(5, 5); -- (No World Order 5, Daniel Zimmermann 5)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(5, 6); -- (No World Order 5,  Henjo Richter 6)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(5, 7); -- (No World Order 5,  Dirk Schlächter 7)
+
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(4, 7); -- (Sigh No More 4,  Dirk Schlächter 7)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(4, 4); -- (Sigh No More 4,  Kai Hansen 4)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(4, 13); -- (Sigh No More 4,  Ralf Scheepers 13)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(4, 14); -- (Sigh No More 4,  Uwe Wessel 14)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(4, 12); -- (Sigh No More 4,  Uli Kusch 12)
+
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(3, 25); -- (Keepers Of The Seven Keys Part II 3,  Michael Kiske 25)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(3, 4); -- (Keepers Of The Seven Keys Part II 3,  Kai Hansen 4)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(3, 18); -- (Keepers Of The Seven Keys Part II 3,  Michael Weikath 18)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(3, 15); -- (Keepers Of The Seven Keys Part II 3,  Markus Grosskopf 15)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(3, 19); -- (Keepers Of The Seven Keys Part II 3,  Ingo Schwichtenberg 19)
+
+
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(1, 20); -- (Iron Maiden 1,  Paul Di Anno 20)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(1, 21); -- (Iron Maiden 1,  Steve Harris 21)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(1, 22); -- (Iron Maiden 1,  Dennis Stratton 22)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(1, 23); -- (Iron Maiden 1,  Dave Murray 23)
+INSERT INTO albumMusiker (albumMusikerAId, albumMusikerMId) VALUES(1, 24); -- (Iron Maiden 1,  Clive Burr 24)
+
+SELECT * FROM albumMusiker;
+-- Kör en kontrollfråga för att kolla så all data är på rätt plats. Ser ut att stämma.
+
+-- sångaren i Helloween heter Andreas Deris, men på många plattor står det Andi Deris. Jag tänker nu ändra/uppdatera det inlagna namnet till Andi Deris istället för Andreas Deris.
+
+UPDATE musiker
+SET musikerNamn = 'Andi Deris'
+WHERE musikerId = 16
+;
+
+SELECT * FROM musiker;
+-- Dubbelkollade och såg att ändringen genomfördes korrekt.
+
+
+
+-- *** SKAPAR INNER JOINS ***
+
+SELECT artistId
+FROM artist
+INNER JOIN album
+ON artistId = albumId;
+-- Genomförd och grön bok!
+
+SELECT musikgenreId
+FROM musikgenre
+INNER JOIN album
+ON musikgenreId = albumId;
+-- Genomförd och grön bok!
+
+
+SELECT musikerId, musikerNamn, albumTitel
+FROM musiker
+INNER JOIN albumMusiker ON musiker.musikerId = albumMusiker.albumMusikerMId
+INNER JOIN album ON albumMusiker.albumMusikerAId = album.albumId;
+-- Genomförd och grön bok!
+
+-- *** SKAPAR VIEWS ***
+
+CREATE VIEW viewAlbumMaiden AS
+SELECT musikerId, musikerNamn, albumTitel
+FROM musiker
+INNER JOIN albumMusiker ON musiker.musikerId = albumMusiker.albumMusikerMId
+INNER JOIN album ON albumMusiker.albumMusikerAId = album.albumId
+WHERE albumTitel = 'Iron Maiden';
+-- Genomförd och grön bok!
+
+
+SELECT * FROM viewAlbumMaiden;
+-- Kör en kontrollfråga på viewAlbumMaiden och ja, den fungerar! Forsätter att skapa nästa View.
+
+CREATE VIEW viewKaiHansensAlbum AS
+SELECT musikerId, musikerNamn, albumTitel
+FROM musiker
+INNER JOIN albumMusiker ON musiker.musikerId = albumMusiker.albumMusikerMId
+INNER JOIN album ON albumMusiker.albumMusikerAId = album.albumId
+WHERE musikerNamn = 'Kai Hansen';
+-- Genomförd och grön bok!
+
+SELECT * FROM viewKaiHansensAlbum;
+-- Kör en kontrollfråga på viewAlbumMaiden och ja, den fungerar! Skapar en likadan och lägger till artistNamn.
+
+CREATE VIEW viewKaiHansensAlbumOchArtist AS
+SELECT musikerId, musikerNamn, albumTitel, artistNamn
+FROM musiker
+INNER JOIN albumMusiker ON musiker.musikerId = albumMusiker.albumMusikerMId
+INNER JOIN album ON albumMusiker.albumMusikerAId = album.albumId
+INNER JOIN artist ON artist.artistId = album.albumArtistId
+WHERE musikerNamn = 'Kai Hansen';
+-- Genomförd och grön bok!
+
+SELECT * FROM viewKaiHansensAlbumOchArtist;
+-- Kör en kontrollfråga och ser att den fungerar, skapar ytterliggare en vy som denna MEN lägger även till musikgenre.
+
+CREATE VIEW viewKaiHansensAlbumOchArtistochGenre AS
+SELECT musikerId, musikerNamn, albumTitel, artistNamn, musikgenreNamn
+FROM musiker
+INNER JOIN albumMusiker ON musiker.musikerId = albumMusiker.albumMusikerMId
+INNER JOIN album ON albumMusiker.albumMusikerAId = album.albumId
+INNER JOIN artist ON artist.artistId = album.albumArtistId
+INNER JOIN musikgenre ON musikgenre.musikgenreId = album.albumMusikgenreId
+WHERE musikerNamn = 'Kai Hansen';
+-- Genomförd och grön bok!
+
+SELECT * FROM viewkaihansensalbumochartistochgenre;
+-- Kör en kontrollfråga och ser att det nu även finns med musikgenre. Testar med att skapa en sista VIEW där även instrument får vara med.
+
+-- ****
+
+CREATE VIEW viewKaiHansensAlbumOchArtistochGenreochInstrument AS
+SELECT musikerId, musikerNamn, albumTitel, artistNamn, musikgenreNamn, instrument
+FROM musiker
+INNER JOIN albumMusiker ON musiker.musikerId = albumMusiker.albumMusikerMId
+INNER JOIN album ON albumMusiker.albumMusikerAId = album.albumId
+INNER JOIN artist ON artist.artistId = album.albumArtistId
+INNER JOIN musikgenre ON musikgenre.musikgenreId = album.albumMusikgenreId
+WHERE musikerNamn = 'Kai Hansen';
+-- Genomförd och grön bok!
+
+SELECT * FROM viewkaihansensalbumochartistochgenreochinstrument;
+-- Kör en kontrollfråga och ser att view fungerar korrekt. Då är samtliga inlagd data med Kai Hansen med i en och samma tabell. Kul :)
+
+-- *** SKAPA UNIKT INDEX OCH KÖRA KONTROLLERA INTEGRITETEN ***
+
+CREATE UNIQUE INDEX index_musikerNamn ON musiker(musikerNamn);
+-- Index skapat, grön bock.Då plockar jag en musiker fårn listan och försöker lägga till samma person på nytt.
+
+SELECT * FROM musiker;
+
+INSERT INTO musiker(musikerNamn, instrument) VALUES('Stipen', 'Drums');
+-- Det gick inte att lägga till Stipen på nytt. Bra, då fungerar integriteten. Provar att radera tabellen musikgenre.
+
+DROP table musikgenre;
+-- Det funkade inte, alltså fungerar integriteten som sig bör.
+
+-- *** SKAPAR STATESTIK ***
+
+SELECT * FROM musiker;
+
+SELECT COUNT(musikerId) AS gitarrkollen FROM musiker WHERE musiker.instrument = 'Guitars';
+-- kollar statestik på hur många som har "Guitars" som instrument. Får fram siffran 5.
+
+SELECT * FROM musiker;
+-- Kör en kontrollfråga, räknar och ser att det stämmer.
+
+SELECT COUNT(musikerId) AS gitarrkollen FROM musiker WHERE musiker.instrument LIKE '%Guitar%';
+-- Kollar statestik på hur många som har Guitar och extra instrument. Får fram siffran 9.
+
+SELECT * FROM musiker;
+-- Kör en kontrollfråga, räknar och ser att det stämmer.
+
+
+-- *** THE END ***
+
+
